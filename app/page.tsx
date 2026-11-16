@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { StorefrontProducts } from "@/components/StorefrontProducts";
 import { StoreHeader } from "@/components/StoreHeader";
 import { StoreShell } from "@/components/StoreShell";
+import { SALE } from "@/lib/sale";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 
 function ProductsFallback() {
@@ -21,35 +22,48 @@ export default function Home() {
 
   return (
     <StoreShell>
-      <div className="maison">
+      <div className="maison sale-site">
+        <div className="sale-ticker" aria-hidden>
+          <div className="sale-ticker-track">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <span key={i}>
+                {SALE.title} · {SALE.tagline} · {SALE.dates} · {SALE.slogan} ·
+              </span>
+            ))}
+          </div>
+        </div>
+
         <StoreHeader />
 
-        <section className="hero">
+        <section className="hero sale-hero">
           <div className="hero-stage">
             <Image
-              src="/images/hero-editorial.jpg"
-              alt="Deo's Hub signature perfume"
+              src="/images/scent-affair-flyer.png"
+              alt="The Scent Affair sale at Deo's Hub"
               fill
               priority
               sizes="(max-width: 900px) 100vw, 52vw"
               className="hero-photo"
             />
             <div className="hero-grain" aria-hidden />
+            <div className="float-orb orb-a" aria-hidden />
+            <div className="float-orb orb-b" aria-hidden />
           </div>
 
           <div className="hero-copy">
-            <p className="eyebrow">Perfume boutique</p>
+            <p className="eyebrow flash-text">Only sales of the year</p>
             <h1>
-              Deo&apos;s
-              <span>Hub</span>
+              The Scent
+              <span>Affair</span>
             </h1>
             <p className="hero-line">
-              Discover your signature scent. Add bottles to your cart, then
-              checkout on WhatsApp.
+              {SALE.dates}. Add bottles to cart, then checkout on WhatsApp{" "}
+              {SALE.whatsappDisplay}.
             </p>
+            <div className="sale-date-pill pulse-glow">{SALE.dates}</div>
             <div className="hero-actions">
-              <a href="#collection" className="btn-solid">
-                Browse collection
+              <a href="#collection" className="btn-solid flash-btn">
+                Shop the sale
               </a>
               <a
                 href={generalWhatsApp}
@@ -57,65 +71,36 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="ghost-link"
               >
-                Chat on WhatsApp
+                WhatsApp {SALE.whatsappDisplay}
                 <span aria-hidden>→</span>
               </a>
             </div>
+            <p className="hero-delivery">{SALE.delivery}</p>
           </div>
         </section>
 
-        <section id="about" className="story">
-          <div className="story-copy">
-            <p className="eyebrow dark">About Deo&apos;s Hub</p>
-            <h2>Scents with presence</h2>
-            <p>
-              We curate perfumes for evenings, offices, and first impressions.
-              Pick what feels like you, add to cart, then message us to confirm.
-            </p>
-            <ul className="story-points">
-              <li>Curated perfume selection</li>
-              <li>Clear sale and real pricing</li>
-              <li>Multi-item cart + WhatsApp checkout</li>
-            </ul>
-            <a href="#collection" className="text-link">
-              Shop scents →
-            </a>
+        <section id="offers" className="offers-strip">
+          <div className="offers-inner">
+            <div className="offers-badge flash-soft">Special Offers</div>
+            <div className="offers-grid">
+              {SALE.offers.map((offer) => (
+                <article key={offer} className="offer-card">
+                  <h3>{offer}</h3>
+                  <p>Grab them before {SALE.dates.split("–")[1]?.trim()}.</p>
+                </article>
+              ))}
+            </div>
+            <p className="offers-slogan">{SALE.slogan}</p>
           </div>
-          <div className="story-visual">
-            <Image
-              src="/images/perfume-feature.jpg"
-              alt="Featured perfume bottle"
-              fill
-              sizes="(max-width: 768px) 100vw, 42vw"
-              className="object-cover"
-            />
-          </div>
-        </section>
-
-        <section className="presence">
-          <Image
-            src="/images/silk-atmosphere.jpg"
-            alt=""
-            fill
-            sizes="100vw"
-            className="presence-bg"
-          />
-          <div className="presence-veil" aria-hidden />
-          <blockquote>
-            <p>
-              Discover your signature scent
-              <em> at Deo&apos;s Hub.</em>
-            </p>
-          </blockquote>
         </section>
 
         <section id="collection" className="archive">
           <header className="archive-head wide">
-            <p className="eyebrow dark">Collection</p>
-            <h2>Scents ready for you</h2>
+            <p className="eyebrow dark flash-text">Sale collection</p>
+            <h2>Smell like luxury, pay less</h2>
             <p className="lede">
-              Add multiple bottles to your cart, then checkout on WhatsApp in
-              one message.
+              Every card shows the real price, slashed price, and calculated
+              discount. Add multiple items, then checkout on WhatsApp.
             </p>
           </header>
           <Suspense fallback={<ProductsFallback />}>
@@ -123,80 +108,44 @@ export default function Home() {
           </Suspense>
         </section>
 
-        <section className="split-gallery">
-          <div className="split-copy">
-            <p className="eyebrow dark">Why shop here</p>
-            <h2>Beautiful bottles. Simple buying.</h2>
-            <p>
-              No long checkout forms. See the perfume, add it to cart, and send
-              your full order on WhatsApp. We reply with confirmation and
-              delivery details.
-            </p>
-          </div>
-          <div className="split-images">
-            <div className="split-frame large">
-              <Image
-                src="/images/lifestyle-notes.jpg"
-                alt="Perfume lifestyle flat lay"
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover"
-              />
-            </div>
-            <div className="split-frame small">
-              <Image
-                src="/images/detail-cap.jpg"
-                alt="Perfume bottle detail"
-                fill
-                sizes="(max-width: 768px) 50vw, 24vw"
-                className="object-cover"
-              />
-            </div>
-            <div className="split-frame small">
-              <Image
-                src="/images/collection-mood.jpg"
-                alt="Perfume collection mood"
-                fill
-                sizes="(max-width: 768px) 50vw, 24vw"
-                className="object-cover"
-              />
-            </div>
-          </div>
-        </section>
-
         <section id="how" className="how">
           <header className="archive-head wide">
             <p className="eyebrow dark">How to order</p>
-            <h2>Three easy steps</h2>
+            <h2>Fast WhatsApp checkout</h2>
           </header>
           <div className="how-grid">
             <article>
               <span>01</span>
-              <h3>Browse</h3>
-              <p>Explore the collection and pick the perfumes you want.</p>
+              <h3>Browse the sale</h3>
+              <p>Pick discounted perfumes from The Scent Affair collection.</p>
             </article>
             <article>
               <span>02</span>
               <h3>Add to cart</h3>
-              <p>
-                Tap Add to cart on each bottle. Build your full order before
-                messaging us.
-              </p>
+              <p>Select as many bottles as you want before checkout.</p>
             </article>
             <article>
               <span>03</span>
-              <h3>Checkout</h3>
+              <h3>WhatsApp us</h3>
               <p>
-                Open cart and tap Checkout on WhatsApp. We confirm payment and
-                delivery.
+                Send your cart to {SALE.whatsappDisplay}. Delivery starts Dec
+                3rd.
               </p>
             </article>
           </div>
+          <a
+            href={generalWhatsApp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-solid how-wa"
+          >
+            Message {SALE.whatsappDisplay}
+          </a>
         </section>
 
         <section className="cta-band">
           <Image
-            src="/images/hero-perfume.jpg"
+            src="/images/logo-deos.png"
             alt=""
             fill
             sizes="100vw"
@@ -204,15 +153,15 @@ export default function Home() {
           />
           <div className="cta-veil" aria-hidden />
           <div className="cta-inner">
-            <p className="eyebrow">Ready to smell amazing?</p>
-            <h2>Fill your cart, then WhatsApp us</h2>
+            <p className="eyebrow flash-text">{SALE.title}</p>
+            <h2>{SALE.slogan}</h2>
             <p>
-              Questions about notes, size, or delivery? Message Deo&apos;s Hub
-              now.
+              Sale runs {SALE.dates}. Message {SALE.whatsappDisplay} on
+              WhatsApp to confirm your order.
             </p>
             <div className="hero-actions">
-              <a href="#collection" className="btn-solid light">
-                Shop collection
+              <a href="#collection" className="btn-solid light flash-btn">
+                Back to sale items
               </a>
               <a
                 href={generalWhatsApp}
@@ -220,7 +169,7 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="ghost-link"
               >
-                Chat on WhatsApp
+                Chat now
                 <span aria-hidden>→</span>
               </a>
             </div>
@@ -230,32 +179,41 @@ export default function Home() {
         <footer className="site-footer rich">
           <div className="footer-grid">
             <div>
-              <p className="logo">
-                Deo&apos;s <i>Hub</i>
-              </p>
+              <div className="footer-brand">
+                <Image
+                  src="/images/logo-deos.png"
+                  alt="Deo's Hub"
+                  width={56}
+                  height={56}
+                  className="logo-mark"
+                />
+                <p className="logo">
+                  Deo&apos;s <i>Hub</i>
+                </p>
+              </div>
               <p>
-                Signature scents. Cart shopping. Simple WhatsApp checkout.
+                {SALE.title}. {SALE.tagline} {SALE.dates}.
               </p>
             </div>
             <div>
               <p className="footer-label">Explore</p>
-              <a href="#about">About</a>
-              <a href="#collection">Shop scents</a>
+              <a href="#offers">Special offers</a>
+              <a href="#collection">Shop sale</a>
               <a href="#how">How to order</a>
             </div>
             <div>
-              <p className="footer-label">Contact</p>
+              <p className="footer-label">WhatsApp</p>
               <a
                 href={generalWhatsApp}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Chat on WhatsApp
+                {SALE.whatsappDisplay}
               </a>
-              <p>We reply fast during business hours.</p>
+              <p>{SALE.delivery}</p>
             </div>
           </div>
-          <p className="footer-base">© 2026 Deo&apos;s Hub</p>
+          <p className="footer-base">© 2026 Deo&apos;s Hub · {SALE.title}</p>
         </footer>
       </div>
     </StoreShell>

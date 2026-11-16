@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { discountPercent } from "@/lib/sale";
 import { buildWhatsAppUrl, formatNaira } from "@/lib/whatsapp";
 import type { Product } from "@/lib/schema";
 import { useCart } from "./CartProvider";
@@ -21,17 +22,8 @@ function ProductCard({
   const { addItem } = useCart();
   const [added, setAdded] = useState(false);
 
-  const hasSlash =
-    !!product.compareAtPrice &&
-    Number(product.compareAtPrice) > Number(product.price);
-
-  const discount = hasSlash
-    ? Math.round(
-        ((Number(product.compareAtPrice) - Number(product.price)) /
-          Number(product.compareAtPrice)) *
-          100,
-      )
-    : 0;
+  const discount = discountPercent(product.price, product.compareAtPrice);
+  const hasSlash = discount > 0;
 
   function handleAdd() {
     addItem({
@@ -60,7 +52,7 @@ function ProductCard({
         />
         <div className="product-card-shade" aria-hidden />
         {hasSlash ? (
-          <span className="sale-tag">-{discount}%</span>
+          <span className="sale-tag flash-badge">{discount}% OFF</span>
         ) : (
           <span className="product-card-chip">{product.category}</span>
         )}
@@ -92,6 +84,9 @@ function ProductCard({
         <div className="product-card-prices">
           {hasSlash ? <s>{formatNaira(product.compareAtPrice!)}</s> : null}
           <strong>{formatNaira(product.price)}</strong>
+          {hasSlash ? (
+            <em className="discount-pill">{discount}% off</em>
+          ) : null}
         </div>
       </div>
     </article>
@@ -104,18 +99,18 @@ export function ProductGrid({ products }: Props) {
       <div className="archive-empty">
         <div className="archive-empty-frame">
           <Image
-            src="/images/perfume-feature.jpg"
-            alt="Perfume bottle preview"
+            src="/images/logo-deos.png"
+            alt="Deo's Hub"
             fill
             sizes="320px"
             className="object-cover"
           />
         </div>
-        <p className="eyebrow dark">Collection</p>
-        <h3>Scents arriving soon</h3>
+        <p className="eyebrow dark">The Scent Affair</p>
+        <h3>Sale items loading soon</h3>
         <p>
-          New perfumes are being curated. Check back shortly, or message us on
-          WhatsApp to ask what is available now.
+          Products will appear here once admin uploads them. Message us on
+          WhatsApp meanwhile.
         </p>
         <a
           href={buildWhatsAppUrl()}

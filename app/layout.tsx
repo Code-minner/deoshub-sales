@@ -16,9 +16,12 @@ const body = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Deo's Hub | Signature Perfumes",
+  title: "The Scent Affair | Deo's Hub",
   description:
-    "Discover your signature scent at Deo's Hub. Browse perfumes and order instantly on WhatsApp.",
+    "Only sales of the year. The Scent Affair runs 27th Nov – 1st Dec. Shop discounted perfumes at Deo's Hub and checkout on WhatsApp 09161848921.",
+  icons: {
+    icon: "/images/logo-deos.png",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

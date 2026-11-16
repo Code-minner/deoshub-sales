@@ -1,3 +1,5 @@
+import { SALE } from "./sale";
+
 export function formatNaira(price: string | number) {
   const value = typeof price === "string" ? Number(price) : price;
   if (Number.isNaN(value)) return String(price);
@@ -19,14 +21,14 @@ export function buildWhatsAppUrl(
   productName?: string,
   price?: string | number,
 ) {
-  const lines = ["Hello Deo's Hub,"];
+  const lines = ["Hello Deo's Hub,", "", `Re: ${SALE.title}`];
 
   if (productName) {
     const priceText =
       price !== undefined ? ` (${formatNaira(price)})` : "";
     lines.push("", `I want to order: ${productName}${priceText}`);
   } else {
-    lines.push("", "I want to place an order / ask about your perfumes.");
+    lines.push("", "I want to place an order from The Scent Affair sale.");
   }
 
   lines.push("", "Please confirm availability. Thank you.");
@@ -34,7 +36,13 @@ export function buildWhatsAppUrl(
 }
 
 export function buildCartWhatsAppUrl(items: CartOrderItem[]) {
-  const lines = ["Hello Deo's Hub,", "", "I want to order:"];
+  const lines = [
+    "Hello Deo's Hub,",
+    "",
+    `Re: ${SALE.title}`,
+    "",
+    "I want to order:",
+  ];
 
   let total = 0;
   for (const item of items) {
@@ -52,10 +60,9 @@ export function buildCartWhatsAppUrl(items: CartOrderItem[]) {
 }
 
 function toWhatsAppLink(message: string) {
-  const number = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "").replace(
-    /\D/g,
-    "",
-  );
+  const number = (
+    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || SALE.whatsappNumber
+  ).replace(/\D/g, "");
 
   if (!number) {
     return `https://wa.me/?text=${encodeURIComponent(message)}`;

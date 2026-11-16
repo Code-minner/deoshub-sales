@@ -89,6 +89,218 @@ a {
   opacity: 0.86;
 }
 
+.logo-img {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.logo-mark {
+  width: 2.4rem;
+  height: 2.4rem;
+  object-fit: cover;
+  border-radius: 999px;
+  border: 1px solid rgba(232, 217, 168, 0.45);
+}
+
+.logo-text {
+  display: none;
+}
+
+@media (min-width: 520px) {
+  .logo-text {
+    display: inline;
+  }
+}
+
+.sale-nav {
+  top: 2.15rem;
+}
+
+.sale-ticker {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  overflow: hidden;
+  background: linear-gradient(90deg, #662374, #3c1144, #662374);
+  color: white;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.55rem 0;
+}
+
+.sale-ticker-track {
+  display: flex;
+  width: max-content;
+  gap: 2rem;
+  animation: ticker 28s linear infinite;
+  white-space: nowrap;
+}
+
+.sale-ticker-track span {
+  opacity: 0.92;
+}
+
+.sale-hero .hero-copy {
+  position: relative;
+  overflow: hidden;
+}
+
+.sale-date-pill {
+  display: inline-flex;
+  margin-top: 1.1rem;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid rgba(232, 217, 168, 0.55);
+  color: var(--champagne);
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hero-delivery {
+  margin: 1rem 0 0;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.9rem;
+}
+
+.float-orb {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(8px);
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.55;
+}
+
+.orb-a {
+  width: 120px;
+  height: 120px;
+  left: 8%;
+  top: 18%;
+  background: radial-gradient(circle, rgba(232, 217, 168, 0.55), transparent 70%);
+  animation: floaty 7s ease-in-out infinite;
+}
+
+.orb-b {
+  width: 90px;
+  height: 90px;
+  right: 12%;
+  bottom: 16%;
+  background: radial-gradient(circle, rgba(180, 120, 255, 0.45), transparent 70%);
+  animation: floaty 9s ease-in-out infinite reverse;
+}
+
+.offers-strip {
+  padding: 3.5rem 1.25rem;
+  background:
+    radial-gradient(600px 260px at 10% 0%, rgba(102, 35, 116, 0.16), transparent 60%),
+    linear-gradient(180deg, #fff7fb, #f3e8f4);
+}
+
+.offers-inner {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.offers-badge {
+  display: inline-flex;
+  margin-bottom: 1.5rem;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  background: var(--brand);
+  color: white;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+}
+
+.offers-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .offers-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.offer-card {
+  padding: 1.35rem 1rem;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--line);
+  animation: rise 0.8s ease both;
+}
+
+.offer-card h3 {
+  margin: 0;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.55rem;
+  font-weight: 400;
+  color: var(--brand);
+}
+
+.offer-card p {
+  margin: 0.45rem 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.offers-slogan {
+  margin: 1.75rem 0 0;
+  font-family: var(--font-display), Georgia, serif;
+  font-style: italic;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  color: var(--brand-deep);
+}
+
+.how-wa {
+  display: inline-flex;
+  margin-top: 1.75rem;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.35rem;
+}
+
+.discount-pill {
+  font-style: normal;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #dc2626;
+  background: rgba(220, 38, 38, 0.12);
+  padding: 0.18rem 0.4rem;
+  font-weight: 700;
+}
+
+.flash-text {
+  animation: flash-color 2.2s ease-in-out infinite;
+}
+
+.flash-soft {
+  animation: flash-soft 2.8s ease-in-out infinite;
+}
+
+.flash-btn {
+  animation: flash-btn 2.4s ease-in-out infinite;
+}
+
+.flash-badge {
+  animation: flash-badge 1.8s ease-in-out infinite;
+}
+
+.pulse-glow {
+  animation: pulse-glow 2.6s ease-in-out infinite;
+}
+
 .nav-right {
   display: flex;
   align-items: center;
@@ -548,7 +760,9 @@ a {
 
 .sale-tag {
   color: white;
-  background: rgba(102, 35, 116, 0.92);
+  background: #dc2626;
+  font-weight: 600;
+  letter-spacing: 0.08em;
 }
 
 .product-card-chip {
@@ -1230,7 +1444,8 @@ a {
   cursor: pointer;
 }
 
-.admin-danger {
+.admin-danger,
+.admin-edit {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
@@ -1242,12 +1457,43 @@ a {
   cursor: pointer;
 }
 
+.admin-edit {
+  border-color: rgba(102, 35, 116, 0.25);
+  color: var(--brand);
+}
+
 .admin-row {
   display: flex;
   align-items: center;
   gap: 0.85rem;
   padding: 0.65rem 0;
   border-bottom: 1px solid rgba(102, 35, 116, 0.08);
+}
+
+.admin-row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.admin-panel-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.admin-ghost.dark {
+  border-color: rgba(102, 35, 116, 0.2);
+  color: var(--ink);
+}
+
+.admin-discount-preview {
+  margin: 0;
+  padding: 0.7rem 0.85rem;
+  background: rgba(102, 35, 116, 0.08);
+  color: var(--brand);
+  font-size: 0.92rem;
 }
 
 .login-page {
@@ -1306,6 +1552,79 @@ a {
   }
   to {
     transform: scale(1.01);
+  }
+}
+
+@keyframes ticker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-18px);
+  }
+}
+
+@keyframes flash-color {
+  0%,
+  100% {
+    color: var(--champagne);
+    opacity: 1;
+  }
+  50% {
+    color: #fff;
+    opacity: 0.72;
+  }
+}
+
+@keyframes flash-soft {
+  0%,
+  100% {
+    box-shadow: 0 0 0 rgba(232, 217, 168, 0);
+    filter: brightness(1);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(232, 217, 168, 0.45);
+    filter: brightness(1.12);
+  }
+}
+
+@keyframes flash-btn {
+  0%,
+  100% {
+    box-shadow: 0 0 0 rgba(102, 35, 116, 0);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(102, 35, 116, 0.45);
+  }
+}
+
+@keyframes flash-badge {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 rgba(232, 217, 168, 0);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(232, 217, 168, 0.35);
   }
 }
 
