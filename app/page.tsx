@@ -1,69 +1,274 @@
 import Image from "next/image";
+import { Suspense } from "react";
+import { StorefrontProducts } from "@/components/StorefrontProducts";
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
+
+function ProductsFallback() {
+  return (
+    <div className="archive-skeleton" aria-hidden>
+      <div className="skel" />
+      <div className="skel" />
+      <div className="skel tall" />
+      <div className="skel" />
+    </div>
+  );
+}
 
 export default function Home() {
+  const generalWhatsApp = buildWhatsAppUrl();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
+    <div className="maison">
+      <header className="nav">
+        <a href="/" className="logo">
+          Deo&apos;s <i>Hub</i>
+        </a>
+        <nav className="nav-links">
+          <a href="#about">About</a>
+          <a href="#collection">Shop</a>
+          <a href="#how">How to order</a>
+          <a
+            href={generalWhatsApp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="nav-cta"
+          >
+            WhatsApp
+          </a>
+        </nav>
+      </header>
+
+      <section className="hero">
+        <div className="hero-stage">
+          <Image
+            src="/images/hero-editorial.jpg"
+            alt="Deo's Hub signature perfume"
+            fill
+            priority
+            sizes="(max-width: 900px) 100vw, 52vw"
+            className="hero-photo"
+          />
+          <div className="hero-grain" aria-hidden />
+        </div>
+
+        <div className="hero-copy">
+          <p className="eyebrow">Perfume boutique</p>
+          <h1>
+            Deo&apos;s
+            <span>Hub</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
+          <p className="hero-line">
+            Discover your signature scent. Choose a perfume and order straight
+            on WhatsApp.
+          </p>
+          <div className="hero-actions">
+            <a href="#collection" className="btn-solid">
+              Browse collection
+            </a>
             <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              href={generalWhatsApp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ghost-link"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+              Chat on WhatsApp
+              <span aria-hidden>→</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" className="story">
+        <div className="story-copy">
+          <p className="eyebrow dark">About Deo&apos;s Hub</p>
+          <h2>Scents with presence</h2>
+          <p>
+            We curate perfumes for evenings, offices, and first impressions.
+            Pick what feels like you, then message us to confirm price and
+            availability.
+          </p>
+          <ul className="story-points">
+            <li>Curated perfume selection</li>
+            <li>Clear pricing on every bottle</li>
+            <li>Fast WhatsApp ordering</li>
+          </ul>
+          <a href="#collection" className="text-link">
+            Shop scents →
+          </a>
+        </div>
+        <div className="story-visual">
+          <Image
+            src="/images/perfume-feature.jpg"
+            alt="Featured perfume bottle"
+            fill
+            sizes="(max-width: 768px) 100vw, 42vw"
+            className="object-cover"
+          />
+        </div>
+      </section>
+
+      <section className="presence">
+        <Image
+          src="/images/silk-atmosphere.jpg"
+          alt=""
+          fill
+          sizes="100vw"
+          className="presence-bg"
+        />
+        <div className="presence-veil" aria-hidden />
+        <blockquote>
+          <p>
+            Discover your signature scent
+            <em> at Deo&apos;s Hub.</em>
+          </p>
+        </blockquote>
+      </section>
+
+      <section id="collection" className="archive">
+        <header className="archive-head wide">
+          <p className="eyebrow dark">Collection</p>
+          <h2>Scents ready for you</h2>
+          <p className="lede">
+            Tap a bottle to open WhatsApp with your order ready to send.
+          </p>
+        </header>
+        <Suspense fallback={<ProductsFallback />}>
+          <StorefrontProducts />
+        </Suspense>
+      </section>
+
+      <section className="split-gallery">
+        <div className="split-copy">
+          <p className="eyebrow dark">Why shop here</p>
+          <h2>Beautiful bottles. Simple buying.</h2>
+          <p>
+            No long checkout forms. See the perfume, love it, and order on
+            WhatsApp in one tap. We reply with confirmation and delivery
+            details.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+        <div className="split-images">
+          <div className="split-frame large">
             <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+              src="/images/lifestyle-notes.jpg"
+              alt="Perfume lifestyle flat lay"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </div>
+          <div className="split-frame small">
+            <Image
+              src="/images/detail-cap.jpg"
+              alt="Perfume bottle detail"
+              fill
+              sizes="(max-width: 768px) 50vw, 24vw"
+              className="object-cover"
+            />
+          </div>
+          <div className="split-frame small">
+            <Image
+              src="/images/collection-mood.jpg"
+              alt="Perfume collection mood"
+              fill
+              sizes="(max-width: 768px) 50vw, 24vw"
+              className="object-cover"
+            />
+          </div>
         </div>
-      </main>
+      </section>
+
+      <section id="how" className="how">
+        <header className="archive-head wide">
+          <p className="eyebrow dark">How to order</p>
+          <h2>Three easy steps</h2>
+        </header>
+        <div className="how-grid">
+          <article>
+            <span>01</span>
+            <h3>Browse</h3>
+            <p>Explore the collection and pick the perfume you want.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>Tap Order</h3>
+            <p>
+              Hit Order on WhatsApp. Your product name and price are filled in
+              for you.
+            </p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>Confirm</h3>
+            <p>We confirm availability, payment, and delivery with you.</p>
+          </article>
+        </div>
+      </section>
+
+      <section className="cta-band">
+        <Image
+          src="/images/hero-perfume.jpg"
+          alt=""
+          fill
+          sizes="100vw"
+          className="cta-bg"
+        />
+        <div className="cta-veil" aria-hidden />
+        <div className="cta-inner">
+          <p className="eyebrow">Ready to smell amazing?</p>
+          <h2>Order your scent on WhatsApp</h2>
+          <p>
+            Questions about notes, size, or delivery? Message Deo&apos;s Hub
+            now.
+          </p>
+          <div className="hero-actions">
+            <a
+              href={generalWhatsApp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-solid light"
+            >
+              Order on WhatsApp
+            </a>
+            <a href="#collection" className="ghost-link">
+              Back to collection
+              <span aria-hidden>→</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <footer className="site-footer rich">
+        <div className="footer-grid">
+          <div>
+            <p className="logo">
+              Deo&apos;s <i>Hub</i>
+            </p>
+            <p>
+              Signature scents. Simple WhatsApp ordering. Discover your next
+              bottle today.
+            </p>
+          </div>
+          <div>
+            <p className="footer-label">Explore</p>
+            <a href="#about">About</a>
+            <a href="#collection">Shop scents</a>
+            <a href="#how">How to order</a>
+          </div>
+          <div>
+            <p className="footer-label">Contact</p>
+            <a
+              href={generalWhatsApp}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Chat on WhatsApp
+            </a>
+            <p>We reply fast during business hours.</p>
+          </div>
+        </div>
+        <p className="footer-base">© 2026 Deo&apos;s Hub</p>
+      </footer>
     </div>
   );
 }
