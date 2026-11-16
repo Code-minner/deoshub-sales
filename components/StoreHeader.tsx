@@ -11,21 +11,22 @@ export function StoreHeader() {
       <a href="/" className="logo">
         Deo&apos;s <i>Hub</i>
       </a>
-      <nav className="nav-links">
-        <a href="#about">About</a>
-        <a href="#collection">Shop</a>
-        <a href="#how">How to order</a>
-        <a
-          href={generalWhatsApp}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="nav-cta"
-        >
-          WhatsApp
-        </a>
+      <div className="nav-right">
+        <nav className="nav-links">
+          <a href="#about">About</a>
+          <a href="#collection">Shop</a>
+          <a href="#how">How to order</a>
+          <a
+            href={generalWhatsApp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="nav-cta"
+          >
+            WhatsApp
+          </a>
+        </nav>
         <CartButton />
-      </nav>
-      <CartButton className="nav-cart-mobile" />
+      </div>
     </header>
   );
 }
