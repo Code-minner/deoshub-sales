@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { formatNaira } from "@/lib/whatsapp";
 import type { Product } from "@/lib/schema";
+import { IconExternal, IconLogout, IconTrash, IconUpload } from "./Icons";
 
 type Props = {
   initialProducts: Product[];
@@ -120,9 +121,11 @@ export function AdminDashboard({ initialProducts }: Props) {
         </div>
         <div className="flex items-center gap-3">
           <a href="/" className="admin-ghost">
+            <IconExternal size={15} />
             View store
           </a>
           <button type="button" onClick={logout} className="admin-ghost">
+            <IconLogout size={15} />
             Log out
           </button>
         </div>
@@ -239,6 +242,7 @@ export function AdminDashboard({ initialProducts }: Props) {
             ) : null}
 
             <button type="submit" className="admin-primary" disabled={busy}>
+              <IconUpload size={15} />
               {busy ? "Publishing..." : "Publish product"}
             </button>
           </form>
@@ -287,6 +291,7 @@ export function AdminDashboard({ initialProducts }: Props) {
                     className="admin-danger"
                     onClick={() => removeProduct(product.id)}
                   >
+                    <IconTrash size={14} />
                     Delete
                   </button>
                 </div>

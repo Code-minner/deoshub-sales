@@ -3,6 +3,13 @@
 import Image from "next/image";
 import { buildCartWhatsAppUrl, formatNaira } from "@/lib/whatsapp";
 import { useCart } from "./CartProvider";
+import {
+  IconClose,
+  IconMinus,
+  IconPlus,
+  IconTrash,
+  IconWhatsApp,
+} from "./Icons";
 
 export function CartDrawer() {
   const { items, open, setOpen, total, updateQty, removeItem, clear } =
@@ -34,10 +41,11 @@ export function CartDrawer() {
           </div>
           <button
             type="button"
-            className="cart-close"
+            className="cart-icon-btn"
+            aria-label="Close cart"
             onClick={() => setOpen(false)}
           >
-            Close
+            <IconClose size={18} />
           </button>
         </header>
 
@@ -58,7 +66,17 @@ export function CartDrawer() {
                     />
                   </div>
                   <div className="cart-item-body">
-                    <p className="cart-item-name">{item.name}</p>
+                    <div className="cart-item-top">
+                      <p className="cart-item-name">{item.name}</p>
+                      <button
+                        type="button"
+                        className="cart-icon-btn subtle"
+                        aria-label={`Remove ${item.name}`}
+                        onClick={() => removeItem(item.id)}
+                      >
+                        <IconTrash size={15} />
+                      </button>
+                    </div>
                     <div className="cart-item-prices">
                       {item.compareAtPrice ? (
                         <s>{formatNaira(item.compareAtPrice)}</s>
@@ -68,23 +86,20 @@ export function CartDrawer() {
                     <div className="cart-qty">
                       <button
                         type="button"
+                        className="cart-qty-btn"
+                        aria-label="Decrease quantity"
                         onClick={() => updateQty(item.id, item.quantity - 1)}
                       >
-                        −
+                        <IconMinus />
                       </button>
                       <span>{item.quantity}</span>
                       <button
                         type="button"
+                        className="cart-qty-btn"
+                        aria-label="Increase quantity"
                         onClick={() => updateQty(item.id, item.quantity + 1)}
                       >
-                        +
-                      </button>
-                      <button
-                        type="button"
-                        className="cart-remove"
-                        onClick={() => removeItem(item.id)}
-                      >
-                        Remove
+                        <IconPlus />
                       </button>
                     </div>
                   </div>
@@ -104,6 +119,7 @@ export function CartDrawer() {
                 className="btn-solid cart-checkout"
                 onClick={() => clear()}
               >
+                <IconWhatsApp size={16} />
                 Checkout on WhatsApp
               </a>
               <button
@@ -111,6 +127,7 @@ export function CartDrawer() {
                 className="cart-clear"
                 onClick={() => clear()}
               >
+                <IconTrash size={14} />
                 Clear cart
               </button>
             </footer>

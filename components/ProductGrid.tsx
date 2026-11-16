@@ -5,6 +5,7 @@ import { useState } from "react";
 import { buildWhatsAppUrl, formatNaira } from "@/lib/whatsapp";
 import type { Product } from "@/lib/schema";
 import { useCart } from "./CartProvider";
+import { IconCart, IconCheck, IconWhatsApp } from "./Icons";
 
 type Props = {
   products: Product[];
@@ -69,31 +70,13 @@ function ProductCard({
           onClick={handleAdd}
         >
           {added ? (
-            "Added"
+            <>
+              <IconCheck size={15} />
+              Added
+            </>
           ) : (
             <>
-              <svg
-                viewBox="0 0 24 24"
-                width="15"
-                height="15"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden
-              >
-                <path d="M6 6h15l-1.5 9h-12z" />
-                <path d="M6 6 5 3H2" />
-                <circle cx="9" cy="20" r="1" fill="currentColor" stroke="none" />
-                <circle
-                  cx="18"
-                  cy="20"
-                  r="1"
-                  fill="currentColor"
-                  stroke="none"
-                />
-              </svg>
+              <IconCart size={15} />
               Add to cart
             </>
           )}
@@ -140,6 +123,7 @@ export function ProductGrid({ products }: Props) {
           rel="noopener noreferrer"
           className="order-btn"
         >
+          <IconWhatsApp size={15} />
           Chat on WhatsApp
         </a>
       </div>

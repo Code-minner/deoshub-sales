@@ -156,6 +156,12 @@ a {
   padding: 0.45rem 0.8rem;
 }
 
+.nav-cta-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
 .hero {
   min-height: 100svh;
   display: grid;
@@ -656,6 +662,7 @@ a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.4rem;
   margin-top: 0.45rem;
   width: 100%;
   padding: 0.62rem 0.7rem;
@@ -736,14 +743,66 @@ a {
   font-weight: 400;
 }
 
-.cart-close,
-.cart-clear,
-.cart-remove {
+.cart-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--ink);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.cart-icon-btn.subtle {
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+}
+
+.cart-icon-btn.subtle:hover {
+  color: #9f1239;
+  background: rgba(159, 18, 57, 0.06);
+}
+
+.cart-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
   border: 0;
   background: transparent;
   color: var(--muted);
   font: inherit;
   cursor: pointer;
+}
+
+.cart-item-top {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.cart-qty-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.cart-checkout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .cart-empty {
@@ -806,19 +865,6 @@ a {
   align-items: center;
   gap: 0.45rem;
   margin-top: 0.45rem;
-}
-
-.cart-qty button {
-  width: 1.6rem;
-  height: 1.6rem;
-  border: 1px solid var(--line);
-  background: white;
-  cursor: pointer;
-}
-
-.cart-remove {
-  margin-left: auto;
-  font-size: 0.78rem;
 }
 
 .cart-foot {
@@ -1153,6 +1199,10 @@ a {
 }
 
 .admin-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
   border: 0;
   background: var(--brand);
   color: white;
@@ -1168,6 +1218,9 @@ a {
 }
 
 .admin-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   border: 1px solid rgba(255, 255, 255, 0.28);
   background: transparent;
   color: white;
@@ -1178,6 +1231,9 @@ a {
 }
 
 .admin-danger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   border: 1px solid rgba(180, 40, 60, 0.25);
   background: transparent;
   color: #9f1239;
