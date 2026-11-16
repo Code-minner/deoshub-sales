@@ -9,15 +9,16 @@ export function formatNaira(price: string | number) {
   }).format(value);
 }
 
+export type CartOrderItem = {
+  name: string;
+  price: string | number;
+  quantity: number;
+};
+
 export function buildWhatsAppUrl(
   productName?: string,
   price?: string | number,
 ) {
-  const number = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "").replace(
-    /\D/g,
-    "",
-  );
-
   const lines = ["Hello Deo's Hub,"];
 
   if (productName) {
@@ -29,8 +30,32 @@ export function buildWhatsAppUrl(
   }
 
   lines.push("", "Please confirm availability. Thank you.");
+  return toWhatsAppLink(lines.join("\n"));
+}
 
-  const message = lines.join("\n");
+export function buildCartWhatsAppUrl(items: CartOrderItem[]) {
+  const lines = ["Hello Deo's Hub,", "", "I want to order:"];
+
+  let total = 0;
+  for (const item of items) {
+    const unit = Number(item.price);
+    const lineTotal = (Number.isNaN(unit) ? 0 : unit) * item.quantity;
+    total += lineTotal;
+    lines.push(
+      `- ${item.name} x${item.quantity} = ${formatNaira(lineTotal)}`,
+    );
+  }
+
+  lines.push("", `Total: ${formatNaira(total)}`);
+  lines.push("", "Please confirm availability. Thank you.");
+  return toWhatsAppLink(lines.join("\n"));
+}
+
+function toWhatsAppLink(message: string) {
+  const number = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "").replace(
+    /\D/g,
+    "",
+  );
 
   if (!number) {
     return `https://wa.me/?text=${encodeURIComponent(message)}`;

@@ -25,6 +25,7 @@ export async function POST(request: Request) {
     const name = String(body.name ?? "").trim();
     const description = String(body.description ?? "").trim();
     const price = String(body.price ?? "").trim();
+    const compareAtRaw = String(body.compareAtPrice ?? "").trim();
     const imageUrl = String(body.imageUrl ?? "").trim();
     const imagePublicId = String(body.imagePublicId ?? "").trim();
     const category = String(body.category ?? "Perfume").trim() || "Perfume";
@@ -41,10 +42,27 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid price" }, { status: 400 });
     }
 
+    const compareAtPrice =
+      compareAtRaw && !Number.isNaN(Number(compareAtRaw))
+        ? compareAtRaw
+        : null;
+
+    if (
+      compareAtPrice !== null &&
+      Number(compareAtPrice) > 0 &&
+      Number(compareAtPrice) <= Number(price)
+    ) {
+      return NextResponse.json(
+        { error: "Slashed price must be higher than the selling price" },
+        { status: 400 },
+      );
+    }
+
     const product = await createProduct({
       name,
       description,
       price,
+      compareAtPrice,
       imageUrl,
       imagePublicId,
       category,

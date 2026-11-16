@@ -14,6 +14,7 @@ type FormState = {
   name: string;
   description: string;
   price: string;
+  compareAtPrice: string;
   category: string;
   stock: string;
 };
@@ -22,6 +23,7 @@ const emptyForm: FormState = {
   name: "",
   description: "",
   price: "",
+  compareAtPrice: "",
   category: "Perfume",
   stock: "1",
 };
@@ -158,9 +160,9 @@ export function AdminDashboard({ initialProducts }: Props) {
               />
             </label>
 
-            <div className="grid gap-4 sm:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-2">
               <label className="admin-field">
-                <span>Price (₦)</span>
+                <span>Selling price (₦)</span>
                 <input
                   required
                   type="number"
@@ -171,6 +173,22 @@ export function AdminDashboard({ initialProducts }: Props) {
                   placeholder="25000"
                 />
               </label>
+              <label className="admin-field">
+                <span>Old / slashed price (₦)</span>
+                <input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={form.compareAtPrice}
+                  onChange={(e) =>
+                    setForm({ ...form, compareAtPrice: e.target.value })
+                  }
+                  placeholder="35000"
+                />
+              </label>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
               <label className="admin-field">
                 <span>Category</span>
                 <input
@@ -252,7 +270,16 @@ export function AdminDashboard({ initialProducts }: Props) {
                       {product.name}
                     </p>
                     <p className="text-sm text-[var(--brand)]">
-                      {formatNaira(product.price)}
+                      {product.compareAtPrice ? (
+                        <>
+                          <s className="mr-2 text-[var(--muted)]">
+                            {formatNaira(product.compareAtPrice)}
+                          </s>
+                          {formatNaira(product.price)}
+                        </>
+                      ) : (
+                        formatNaira(product.price)
+                      )}
                     </p>
                   </div>
                   <button

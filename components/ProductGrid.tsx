@@ -3,12 +3,15 @@
 import Image from "next/image";
 import { buildWhatsAppUrl, formatNaira } from "@/lib/whatsapp";
 import type { Product } from "@/lib/schema";
+import { useCart } from "./CartProvider";
 
 type Props = {
   products: Product[];
 };
 
 export function ProductGrid({ products }: Props) {
+  const { addItem } = useCart();
+
   if (products.length === 0) {
     return (
       <div className="archive-empty">
@@ -40,45 +43,53 @@ export function ProductGrid({ products }: Props) {
   }
 
   return (
-    <div className="archive-grid">
+    <div className="shop-grid">
       {products.map((product, index) => {
-        const wa = buildWhatsAppUrl(product.name, product.price);
-        const featured = index % 5 === 0;
+        const hasSlash =
+          product.compareAtPrice &&
+          Number(product.compareAtPrice) > Number(product.price);
 
         return (
           <article
             key={product.id}
-            className={`scent ${featured ? "scent-feature" : ""}`}
-            style={{ animationDelay: `${Math.min(index, 6) * 70}ms` }}
+            className="product-card"
+            style={{ animationDelay: `${Math.min(index, 8) * 50}ms` }}
           >
-            <div className="scent-media">
+            <div className="product-card-media">
               <Image
                 src={product.imageUrl}
                 alt={product.name}
                 fill
-                sizes="(max-width: 768px) 100vw, 40vw"
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 220px"
                 className="object-cover"
               />
-              <span className="scent-badge">{product.category}</span>
+              {hasSlash ? <span className="sale-tag">Sale</span> : null}
             </div>
-            <div className="scent-meta">
-              <div>
-                <h3>{product.name}</h3>
-                {product.description ? (
-                  <p className="scent-note">{product.description}</p>
+
+            <div className="product-card-body">
+              <p className="product-card-cat">{product.category}</p>
+              <h3>{product.name}</h3>
+              <div className="product-card-prices">
+                {hasSlash ? (
+                  <s>{formatNaira(product.compareAtPrice!)}</s>
                 ) : null}
+                <strong>{formatNaira(product.price)}</strong>
               </div>
-              <div className="scent-foot">
-                <p className="scent-price">{formatNaira(product.price)}</p>
-                <a
-                  href={wa}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="order-btn"
-                >
-                  Order on WhatsApp
-                </a>
-              </div>
+              <button
+                type="button"
+                className="add-cart-btn"
+                onClick={() =>
+                  addItem({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    compareAtPrice: product.compareAtPrice,
+                    imageUrl: product.imageUrl,
+                  })
+                }
+              >
+                Add to cart
+              </button>
             </div>
           </article>
         );

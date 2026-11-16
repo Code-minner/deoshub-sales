@@ -36,13 +36,17 @@ export async function PATCH(request: Request, context: RouteContext) {
 
     const { id } = await context.params;
     const body = await request.json();
-    const data: Record<string, string | number> = {};
+    const data: Parameters<typeof updateProduct>[1] = {};
 
     if (body.name !== undefined) data.name = String(body.name).trim();
     if (body.description !== undefined) {
       data.description = String(body.description).trim();
     }
     if (body.price !== undefined) data.price = String(body.price).trim();
+    if (body.compareAtPrice !== undefined) {
+      const raw = String(body.compareAtPrice).trim();
+      data.compareAtPrice = raw || null;
+    }
     if (body.category !== undefined) {
       data.category = String(body.category).trim();
     }

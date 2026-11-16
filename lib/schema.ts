@@ -12,6 +12,7 @@ export const products = pgTable("products", {
   name: text("name").notNull(),
   description: text("description").notNull().default(""),
   price: numeric("price", { precision: 12, scale: 2 }).notNull(),
+  compareAtPrice: numeric("compare_at_price", { precision: 12, scale: 2 }),
   imageUrl: text("image_url").notNull(),
   imagePublicId: text("image_public_id").notNull(),
   category: text("category").notNull().default("Perfume"),
