@@ -21,9 +21,13 @@ export const metadata: Metadata = {
     "Only sales of the year. The Scent Affair runs 27th Nov – 1st Dec. Shop discounted perfumes at Deo's Hub and checkout on WhatsApp 09161848921.",
   applicationName: "Deo's Hub",
   icons: {
-    icon: [{ url: "/images/logo-deos.png", type: "image/png" }],
-    apple: [{ url: "/images/logo-deos.png", type: "image/png" }],
-    shortcut: ["/images/logo-deos.png"],
+    icon: [
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-48.png", sizes: "48x48", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: ["/favicon-32.png"],
   },
   openGraph: {
     title: "The Scent Affair | Deo's Hub",
