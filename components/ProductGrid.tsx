@@ -1,13 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { type MouseEvent, useMemo, useState } from "react";
 import { PRODUCT_CATEGORIES, normalizeCategory } from "@/lib/categories";
 import { discountPercent } from "@/lib/sale";
 import { buildWhatsAppUrl, formatNaira } from "@/lib/whatsapp";
 import type { Product } from "@/lib/schema";
 import { useCart } from "./CartProvider";
+import { useCatalog } from "./CatalogProvider";
 import { IconCart, IconCheck, IconWhatsApp } from "./Icons";
+import { useSearch } from "./SearchProvider";
 
 type Props = {
   products: Product[];
@@ -23,6 +25,7 @@ function ProductCard({
   index: number;
 }) {
   const { addItem } = useCart();
+  const { openProduct } = useCatalog();
   const [added, setAdded] = useState(false);
 
   const discount = discountPercent(product.price, product.compareAtPrice);
@@ -31,7 +34,8 @@ function ProductCard({
     ? `${product.name} · ${product.subname}`
     : product.name;
 
-  function handleAdd() {
+  function handleAdd(e: MouseEvent) {
+    e.stopPropagation();
     addItem({
       id: product.id,
       name: displayName,
@@ -45,8 +49,18 @@ function ProductCard({
 
   return (
     <article
-      className="product-card"
+      className="product-card is-clickable"
       style={{ animationDelay: `${Math.min(index, 8) * 50}ms` }}
+      onClick={() => openProduct(product)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openProduct(product);
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      aria-label={`View ${product.name}`}
     >
       <div className="product-card-media">
         <Image
@@ -108,13 +122,27 @@ function ProductCard({
 
 export function ProductGrid({ products }: Props) {
   const [filter, setFilter] = useState<Filter>("All");
+  const { query } = useSearch();
 
   const filtered = useMemo(() => {
-    if (filter === "All") return products;
-    return products.filter(
-      (product) => normalizeCategory(product.category) === filter,
-    );
-  }, [filter, products]);
+    const needle = query.trim().toLowerCase();
+    return products.filter((product) => {
+      const categoryOk =
+        filter === "All" || normalizeCategory(product.category) === filter;
+      if (!categoryOk) return false;
+      if (!needle) return true;
+      const haystack = [
+        product.name,
+        product.subname,
+        product.description,
+        product.category,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+      return haystack.includes(needle);
+    });
+  }, [filter, products, query]);
 
   if (products.length === 0) {
     return (
@@ -138,7 +166,7 @@ export function ProductGrid({ products }: Props) {
           href={buildWhatsAppUrl()}
           target="_blank"
           rel="noopener noreferrer"
-          className="order-btn"
+          className="order-btn wa-btn"
         >
           <IconWhatsApp size={15} />
           Chat on WhatsApp
@@ -169,8 +197,18 @@ export function ProductGrid({ products }: Props) {
         ))}
       </div>
 
+      {query.trim() ? (
+        <p className="search-result-note">
+          Showing results for &ldquo;{query.trim()}&rdquo;
+        </p>
+      ) : null}
+
       {filtered.length === 0 ? (
-        <p className="category-empty">No products in {filter} yet.</p>
+        <p className="category-empty">
+          {query.trim()
+            ? `No products match “${query.trim()}”.`
+            : `No products in ${filter} yet.`}
+        </p>
       ) : (
         <div className="shop-grid">
           {filtered.map((product, index) => (

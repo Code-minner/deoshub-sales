@@ -116,7 +116,7 @@ export function CartDrawer() {
                 href={checkoutUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-solid cart-checkout"
+                className="wa-btn cart-checkout"
                 onClick={() => clear()}
               >
                 <IconWhatsApp size={16} />

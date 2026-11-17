@@ -1,10 +1,11 @@
 import { desc, eq } from "drizzle-orm";
+import { cache } from "react";
 import { db } from "./db";
 import { products, type NewProduct } from "./schema";
 
-export async function listProducts() {
+export const listProducts = cache(async () => {
   return db.select().from(products).orderBy(desc(products.createdAt));
-}
+});
 
 export async function getProduct(id: string) {
   const rows = await db
