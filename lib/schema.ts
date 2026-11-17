@@ -10,12 +10,13 @@ import {
 export const products = pgTable("products", {
   id: uuid("id").defaultRandom().primaryKey(),
   name: text("name").notNull(),
+  subname: text("subname").notNull().default(""),
   description: text("description").notNull().default(""),
   price: numeric("price", { precision: 12, scale: 2 }).notNull(),
   compareAtPrice: numeric("compare_at_price", { precision: 12, scale: 2 }),
   imageUrl: text("image_url").notNull(),
   imagePublicId: text("image_public_id").notNull(),
-  category: text("category").notNull().default("Perfume"),
+  category: text("category").notNull().default("EDP"),
   stock: integer("stock").notNull().default(1),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()

@@ -38,8 +38,8 @@ export default function Home() {
         <section className="hero sale-hero">
           <div className="hero-stage">
             <Image
-              src="/images/scent-affair-flyer.png"
-              alt="The Scent Affair sale at Deo's Hub"
+              src="/images/logo-deos.png"
+              alt="Deo's Hub"
               fill
               priority
               sizes="(max-width: 900px) 100vw, 52vw"
@@ -98,10 +98,6 @@ export default function Home() {
           <header className="archive-head wide">
             <p className="eyebrow dark flash-text">Sale collection</p>
             <h2>Smell like luxury, pay less</h2>
-            <p className="lede">
-              Every card shows the real price, slashed price, and calculated
-              discount. Add multiple items, then checkout on WhatsApp.
-            </p>
           </header>
           <Suspense fallback={<ProductsFallback />}>
             <StorefrontProducts />

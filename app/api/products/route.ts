@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { isAuthenticated } from "@/lib/auth";
+import { isProductCategory } from "@/lib/categories";
 import { createProduct, listProducts } from "@/lib/products";
 
 export async function GET() {
@@ -23,12 +24,14 @@ export async function POST(request: Request) {
 
     const body = await request.json();
     const name = String(body.name ?? "").trim();
+    const subname = String(body.subname ?? "").trim();
     const description = String(body.description ?? "").trim();
     const price = String(body.price ?? "").trim();
     const compareAtRaw = String(body.compareAtPrice ?? "").trim();
     const imageUrl = String(body.imageUrl ?? "").trim();
     const imagePublicId = String(body.imagePublicId ?? "").trim();
-    const category = String(body.category ?? "Perfume").trim() || "Perfume";
+    const categoryRaw = String(body.category ?? "EDP").trim();
+    const category = isProductCategory(categoryRaw) ? categoryRaw : "EDP";
     const stock = Number(body.stock ?? 1);
 
     if (!name || !price || !imageUrl || !imagePublicId) {
@@ -60,6 +63,7 @@ export async function POST(request: Request) {
 
     const product = await createProduct({
       name,
+      subname,
       description,
       price,
       compareAtPrice,

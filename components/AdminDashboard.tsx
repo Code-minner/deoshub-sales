@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FormEvent, useMemo, useState } from "react";
+import { PRODUCT_CATEGORIES, isProductCategory } from "@/lib/categories";
 import { discountPercent } from "@/lib/sale";
 import { formatNaira } from "@/lib/whatsapp";
 import type { Product } from "@/lib/schema";
@@ -20,6 +21,7 @@ type Props = {
 
 type FormState = {
   name: string;
+  subname: string;
   description: string;
   price: string;
   compareAtPrice: string;
@@ -29,22 +31,24 @@ type FormState = {
 
 const emptyForm: FormState = {
   name: "",
+  subname: "",
   description: "",
   price: "",
   compareAtPrice: "",
-  category: "Perfume",
+  category: "EDP",
   stock: "1",
 };
 
 function toForm(product: Product): FormState {
   return {
     name: product.name,
+    subname: product.subname ?? "",
     description: product.description ?? "",
     price: String(product.price ?? ""),
     compareAtPrice: product.compareAtPrice
       ? String(product.compareAtPrice)
       : "",
-    category: product.category || "Perfume",
+    category: isProductCategory(product.category) ? product.category : "EDP",
     stock: String(product.stock ?? 1),
   };
 }
@@ -234,7 +238,16 @@ export function AdminDashboard({ initialProducts }: Props) {
                 required
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                placeholder="Velvet Noir"
+                placeholder="Khamrah"
+              />
+            </label>
+
+            <label className="admin-field">
+              <span>Subname</span>
+              <input
+                value={form.subname}
+                onChange={(e) => setForm({ ...form, subname: e.target.value })}
+                placeholder="Lattafa / 100ml / Women"
               />
             </label>
 
@@ -292,12 +305,18 @@ export function AdminDashboard({ initialProducts }: Props) {
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="admin-field">
                 <span>Category</span>
-                <input
+                <select
                   value={form.category}
                   onChange={(e) =>
                     setForm({ ...form, category: e.target.value })
                   }
-                />
+                >
+                  {PRODUCT_CATEGORIES.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
               </label>
               <label className="admin-field">
                 <span>Stock</span>
@@ -383,6 +402,14 @@ export function AdminDashboard({ initialProducts }: Props) {
                     <div className="min-w-0 flex-1">
                       <p className="truncate font-medium text-[var(--ink)]">
                         {product.name}
+                        {product.subname ? (
+                          <span className="ml-2 text-xs font-normal text-[var(--muted)]">
+                            {product.subname}
+                          </span>
+                        ) : null}
+                      </p>
+                      <p className="text-xs uppercase tracking-wide text-[var(--muted)]">
+                        {product.category}
                       </p>
                       <p className="text-sm text-[var(--brand)]">
                         {product.compareAtPrice ? (

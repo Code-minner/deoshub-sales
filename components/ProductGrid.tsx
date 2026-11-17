@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { PRODUCT_CATEGORIES } from "@/lib/categories";
 import { discountPercent } from "@/lib/sale";
 import { buildWhatsAppUrl, formatNaira } from "@/lib/whatsapp";
 import type { Product } from "@/lib/schema";
@@ -11,6 +12,8 @@ import { IconCart, IconCheck, IconWhatsApp } from "./Icons";
 type Props = {
   products: Product[];
 };
+
+type Filter = "All" | (typeof PRODUCT_CATEGORIES)[number];
 
 function ProductCard({
   product,
@@ -24,11 +27,14 @@ function ProductCard({
 
   const discount = discountPercent(product.price, product.compareAtPrice);
   const hasSlash = discount > 0;
+  const displayName = product.subname
+    ? `${product.name} · ${product.subname}`
+    : product.name;
 
   function handleAdd() {
     addItem({
       id: product.id,
-      name: product.name,
+      name: displayName,
       price: product.price,
       compareAtPrice: product.compareAtPrice,
       imageUrl: product.imageUrl,
@@ -78,6 +84,9 @@ function ProductCard({
       <div className="product-card-body">
         <p className="product-card-cat">{product.category}</p>
         <h3>{product.name}</h3>
+        {product.subname ? (
+          <p className="product-card-subname">{product.subname}</p>
+        ) : null}
         {product.description ? (
           <p className="product-card-note">{product.description}</p>
         ) : null}
@@ -94,6 +103,13 @@ function ProductCard({
 }
 
 export function ProductGrid({ products }: Props) {
+  const [filter, setFilter] = useState<Filter>("All");
+
+  const filtered = useMemo(() => {
+    if (filter === "All") return products;
+    return products.filter((product) => product.category === filter);
+  }, [filter, products]);
+
   if (products.length === 0) {
     return (
       <div className="archive-empty">
@@ -126,10 +142,36 @@ export function ProductGrid({ products }: Props) {
   }
 
   return (
-    <div className="shop-grid">
-      {products.map((product, index) => (
-        <ProductCard key={product.id} product={product} index={index} />
-      ))}
+    <div>
+      <div className="category-tabs" role="tablist" aria-label="Product categories">
+        <button
+          type="button"
+          className={filter === "All" ? "is-active" : ""}
+          onClick={() => setFilter("All")}
+        >
+          All
+        </button>
+        {PRODUCT_CATEGORIES.map((category) => (
+          <button
+            key={category}
+            type="button"
+            className={filter === category ? "is-active" : ""}
+            onClick={() => setFilter(category)}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+
+      {filtered.length === 0 ? (
+        <p className="category-empty">No products in {filter} yet.</p>
+      ) : (
+        <div className="shop-grid">
+          {filtered.map((product, index) => (
+            <ProductCard key={product.id} product={product} index={index} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

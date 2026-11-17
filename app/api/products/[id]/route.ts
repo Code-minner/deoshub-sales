@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { isAuthenticated } from "@/lib/auth";
+import { isProductCategory } from "@/lib/categories";
 import { deleteImage } from "@/lib/cloudinary";
 import {
   deleteProduct,
@@ -39,6 +40,7 @@ export async function PATCH(request: Request, context: RouteContext) {
     const data: Parameters<typeof updateProduct>[1] = {};
 
     if (body.name !== undefined) data.name = String(body.name).trim();
+    if (body.subname !== undefined) data.subname = String(body.subname).trim();
     if (body.description !== undefined) {
       data.description = String(body.description).trim();
     }
@@ -48,7 +50,8 @@ export async function PATCH(request: Request, context: RouteContext) {
       data.compareAtPrice = raw || null;
     }
     if (body.category !== undefined) {
-      data.category = String(body.category).trim();
+      const categoryRaw = String(body.category).trim();
+      data.category = isProductCategory(categoryRaw) ? categoryRaw : "EDP";
     }
     if (body.stock !== undefined) data.stock = Number(body.stock);
     if (body.imageUrl !== undefined) data.imageUrl = String(body.imageUrl);
