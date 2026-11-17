@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Suspense } from "react";
+import { HeroSlider } from "@/components/HeroSlider";
 import { StorefrontProducts } from "@/components/StorefrontProducts";
 import { StoreHeader } from "@/components/StoreHeader";
 import { StoreShell } from "@/components/StoreShell";
@@ -35,19 +36,9 @@ export default function Home() {
 
         <StoreHeader />
 
-        <section className="hero sale-hero">
+        <section className="hero sale-hero hero-overlay">
           <div className="hero-stage">
-            <Image
-              src="/images/logo-deos.png"
-              alt="Deo's Hub"
-              fill
-              priority
-              sizes="(max-width: 900px) 100vw, 52vw"
-              className="hero-photo"
-            />
-            <div className="hero-grain" aria-hidden />
-            <div className="float-orb orb-a" aria-hidden />
-            <div className="float-orb orb-b" aria-hidden />
+            <HeroSlider />
           </div>
 
           <div className="hero-copy">

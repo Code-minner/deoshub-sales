@@ -51,7 +51,7 @@ export async function PATCH(request: Request, context: RouteContext) {
     }
     if (body.category !== undefined) {
       const categoryRaw = String(body.category).trim();
-      data.category = isProductCategory(categoryRaw) ? categoryRaw : "EDP";
+      data.category = isProductCategory(categoryRaw) ? categoryRaw : "Perfume";
     }
     if (body.stock !== undefined) data.stock = Number(body.stock);
     if (body.imageUrl !== undefined) data.imageUrl = String(body.imageUrl);

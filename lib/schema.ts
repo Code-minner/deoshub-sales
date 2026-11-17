@@ -16,7 +16,7 @@ export const products = pgTable("products", {
   compareAtPrice: numeric("compare_at_price", { precision: 12, scale: 2 }),
   imageUrl: text("image_url").notNull(),
   imagePublicId: text("image_public_id").notNull(),
-  category: text("category").notNull().default("EDP"),
+  category: text("category").notNull().default("Perfume"),
   stock: integer("stock").notNull().default(1),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()

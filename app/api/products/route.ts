@@ -30,8 +30,8 @@ export async function POST(request: Request) {
     const compareAtRaw = String(body.compareAtPrice ?? "").trim();
     const imageUrl = String(body.imageUrl ?? "").trim();
     const imagePublicId = String(body.imagePublicId ?? "").trim();
-    const categoryRaw = String(body.category ?? "EDP").trim();
-    const category = isProductCategory(categoryRaw) ? categoryRaw : "EDP";
+    const categoryRaw = String(body.category ?? "Perfume").trim();
+    const category = isProductCategory(categoryRaw) ? categoryRaw : "Perfume";
     const stock = Number(body.stock ?? 1);
 
     if (!name || !price || !imageUrl || !imagePublicId) {

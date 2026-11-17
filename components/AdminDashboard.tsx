@@ -3,7 +3,11 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FormEvent, useMemo, useState } from "react";
-import { PRODUCT_CATEGORIES, isProductCategory } from "@/lib/categories";
+import {
+  PRODUCT_CATEGORIES,
+  isProductCategory,
+  normalizeCategory,
+} from "@/lib/categories";
 import { discountPercent } from "@/lib/sale";
 import { formatNaira } from "@/lib/whatsapp";
 import type { Product } from "@/lib/schema";
@@ -35,7 +39,7 @@ const emptyForm: FormState = {
   description: "",
   price: "",
   compareAtPrice: "",
-  category: "EDP",
+  category: "Perfume",
   stock: "1",
 };
 
@@ -48,7 +52,7 @@ function toForm(product: Product): FormState {
     compareAtPrice: product.compareAtPrice
       ? String(product.compareAtPrice)
       : "",
-    category: isProductCategory(product.category) ? product.category : "EDP",
+    category: normalizeCategory(product.category),
     stock: String(product.stock ?? 1),
   };
 }
@@ -409,7 +413,7 @@ export function AdminDashboard({ initialProducts }: Props) {
                         ) : null}
                       </p>
                       <p className="text-xs uppercase tracking-wide text-[var(--muted)]">
-                        {product.category}
+                        {normalizeCategory(product.category)}
                       </p>
                       <p className="text-sm text-[var(--brand)]">
                         {product.compareAtPrice ? (

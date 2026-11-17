@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useMemo, useState } from "react";
-import { PRODUCT_CATEGORIES } from "@/lib/categories";
+import { PRODUCT_CATEGORIES, normalizeCategory } from "@/lib/categories";
 import { discountPercent } from "@/lib/sale";
 import { buildWhatsAppUrl, formatNaira } from "@/lib/whatsapp";
 import type { Product } from "@/lib/schema";
@@ -60,7 +60,9 @@ function ProductCard({
         {hasSlash ? (
           <span className="sale-tag flash-badge">{discount}% OFF</span>
         ) : (
-          <span className="product-card-chip">{product.category}</span>
+          <span className="product-card-chip">
+            {normalizeCategory(product.category)}
+          </span>
         )}
         <button
           type="button"
@@ -82,7 +84,9 @@ function ProductCard({
       </div>
 
       <div className="product-card-body">
-        <p className="product-card-cat">{product.category}</p>
+        <p className="product-card-cat">
+          {normalizeCategory(product.category)}
+        </p>
         <h3>{product.name}</h3>
         {product.subname ? (
           <p className="product-card-subname">{product.subname}</p>
@@ -107,7 +111,9 @@ export function ProductGrid({ products }: Props) {
 
   const filtered = useMemo(() => {
     if (filter === "All") return products;
-    return products.filter((product) => product.category === filter);
+    return products.filter(
+      (product) => normalizeCategory(product.category) === filter,
+    );
   }, [filter, products]);
 
   if (products.length === 0) {
