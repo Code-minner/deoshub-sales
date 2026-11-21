@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { normalizeCategory } from "@/lib/categories";
 import { discountPercent } from "@/lib/sale";
+import { cartLineId, cartLineName, parseScents } from "@/lib/scents";
 import { buildWhatsAppUrl, formatNaira } from "@/lib/whatsapp";
 import { useCart } from "./CartProvider";
 import { useCatalog } from "./CatalogProvider";
@@ -13,6 +14,13 @@ export function ProductModal() {
   const { activeProduct, closeProduct } = useCatalog();
   const { addItem } = useCart();
   const [added, setAdded] = useState(false);
+  const [selectedScent, setSelectedScent] = useState("");
+  const [scentError, setScentError] = useState<string | null>(null);
+
+  const scents = useMemo(
+    () => parseScents(activeProduct?.scents),
+    [activeProduct?.scents],
+  );
 
   useEffect(() => {
     if (!activeProduct) return;
@@ -32,21 +40,36 @@ export function ProductModal() {
 
   useEffect(() => {
     setAdded(false);
-  }, [activeProduct?.id]);
+    setScentError(null);
+    const nextScents = parseScents(activeProduct?.scents);
+    setSelectedScent(nextScents[0] ?? "");
+  }, [activeProduct?.id, activeProduct?.scents]);
 
   if (!activeProduct) return null;
 
   const product = activeProduct;
   const discount = discountPercent(product.price, product.compareAtPrice);
   const hasSlash = discount > 0;
-  const displayName = product.subname
+  const baseName = product.subname
     ? `${product.name} · ${product.subname}`
     : product.name;
+  const displayName = cartLineName(baseName, selectedScent || null);
   const waUrl = buildWhatsAppUrl(displayName, product.price);
 
+  function ensureScent() {
+    if (scents.length === 0) return true;
+    if (!selectedScent) {
+      setScentError("Please select a scent");
+      return false;
+    }
+    setScentError(null);
+    return true;
+  }
+
   function handleAdd() {
+    if (!ensureScent()) return;
     addItem({
-      id: product.id,
+      id: cartLineId(product.id, selectedScent || null),
       name: displayName,
       price: product.price,
       compareAtPrice: product.compareAtPrice,
@@ -119,6 +142,32 @@ export function ProductModal() {
             </p>
           )}
 
+          {scents.length > 0 ? (
+            <div className="scent-picker">
+              <p className="scent-picker-label">Choose scent</p>
+              <div className="scent-picker-list" role="listbox" aria-label="Scents">
+                {scents.map((scent) => (
+                  <button
+                    key={scent}
+                    type="button"
+                    role="option"
+                    aria-selected={selectedScent === scent}
+                    className={`scent-chip ${selectedScent === scent ? "is-active" : ""}`}
+                    onClick={() => {
+                      setSelectedScent(scent);
+                      setScentError(null);
+                    }}
+                  >
+                    {scent}
+                  </button>
+                ))}
+              </div>
+              {scentError ? (
+                <p className="scent-picker-error">{scentError}</p>
+              ) : null}
+            </div>
+          ) : null}
+
           <div className="product-modal-actions">
             <button
               type="button"
@@ -142,6 +191,9 @@ export function ProductModal() {
               target="_blank"
               rel="noopener noreferrer"
               className="wa-btn"
+              onClick={(e) => {
+                if (!ensureScent()) e.preventDefault();
+              }}
             >
               <IconWhatsApp size={16} />
               Order on WhatsApp

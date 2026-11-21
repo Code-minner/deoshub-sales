@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { isAuthenticated } from "@/lib/auth";
 import { isProductCategory } from "@/lib/categories";
 import { createProduct, listProducts } from "@/lib/products";
+import { parseScents, serializeScents } from "@/lib/scents";
 
 export async function GET() {
   try {
@@ -33,16 +34,17 @@ export async function POST(request: Request) {
     const categoryRaw = String(body.category ?? "Perfume").trim();
     const category = isProductCategory(categoryRaw) ? categoryRaw : "Perfume";
     const stock = Number(body.stock ?? 1);
+    const scents = serializeScents(parseScents(body.scents));
 
     if (!name || !price || !imageUrl || !imagePublicId) {
       return NextResponse.json(
-        { error: "Name, price, and image are required" },
+        { error: "Name, sale price, and image are required" },
         { status: 400 },
       );
     }
 
     if (Number.isNaN(Number(price)) || Number(price) < 0) {
-      return NextResponse.json({ error: "Invalid price" }, { status: 400 });
+      return NextResponse.json({ error: "Invalid sale price" }, { status: 400 });
     }
 
     const compareAtPrice =
@@ -56,7 +58,7 @@ export async function POST(request: Request) {
       Number(compareAtPrice) <= Number(price)
     ) {
       return NextResponse.json(
-        { error: "Slashed price must be higher than the selling price" },
+        { error: "Normal price must be higher than the sale price" },
         { status: 400 },
       );
     }
@@ -70,6 +72,7 @@ export async function POST(request: Request) {
       imageUrl,
       imagePublicId,
       category,
+      scents,
       stock: Number.isFinite(stock) ? stock : 1,
     });
 

@@ -2067,6 +2067,91 @@ a {
   font-size: 0.92rem;
 }
 
+.admin-scent-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.admin-scent-row input {
+  flex: 1;
+  border: 1px solid rgba(102, 35, 116, 0.18);
+  background: #fff;
+  color: var(--ink);
+  padding: 0.7rem 0.8rem;
+  font: inherit;
+  outline: none;
+}
+
+.admin-scent-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.75rem;
+}
+
+.admin-scent-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid rgba(102, 35, 116, 0.18);
+  background: #f7f1f8;
+  color: var(--ink);
+  padding: 0.4rem 0.65rem;
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.admin-scent-chip:hover {
+  border-color: rgba(159, 18, 57, 0.35);
+  color: #9f1239;
+}
+
+.scent-picker {
+  margin-top: 1.1rem;
+}
+
+.scent-picker-label {
+  margin: 0 0 0.55rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.scent-picker-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.scent-chip {
+  border: 1px solid rgba(102, 35, 116, 0.18);
+  background: #fff;
+  color: var(--ink);
+  padding: 0.55rem 0.85rem;
+  font: inherit;
+  font-size: 0.86rem;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.scent-chip:hover {
+  border-color: var(--brand);
+}
+
+.scent-chip.is-active {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}
+
+.scent-picker-error {
+  margin: 0.55rem 0 0;
+  color: #9f1239;
+  font-size: 0.82rem;
+}
+
 .login-page {
   position: relative;
   min-height: 100svh;

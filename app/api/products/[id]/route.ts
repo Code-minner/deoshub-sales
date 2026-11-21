@@ -7,6 +7,7 @@ import {
   getProduct,
   updateProduct,
 } from "@/lib/products";
+import { parseScents, serializeScents } from "@/lib/scents";
 
 type RouteContext = {
   params: Promise<{ id: string }>;
@@ -53,10 +54,26 @@ export async function PATCH(request: Request, context: RouteContext) {
       const categoryRaw = String(body.category).trim();
       data.category = isProductCategory(categoryRaw) ? categoryRaw : "Perfume";
     }
+    if (body.scents !== undefined) {
+      data.scents = serializeScents(parseScents(body.scents));
+    }
     if (body.stock !== undefined) data.stock = Number(body.stock);
     if (body.imageUrl !== undefined) data.imageUrl = String(body.imageUrl);
     if (body.imagePublicId !== undefined) {
       data.imagePublicId = String(body.imagePublicId);
+    }
+
+    if (
+      data.price !== undefined &&
+      data.compareAtPrice !== undefined &&
+      data.compareAtPrice !== null &&
+      Number(data.compareAtPrice) > 0 &&
+      Number(data.compareAtPrice) <= Number(data.price)
+    ) {
+      return NextResponse.json(
+        { error: "Normal price must be higher than the sale price" },
+        { status: 400 },
+      );
     }
 
     const product = await updateProduct(id, data);

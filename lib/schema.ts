@@ -17,6 +17,8 @@ export const products = pgTable("products", {
   imageUrl: text("image_url").notNull(),
   imagePublicId: text("image_public_id").notNull(),
   category: text("category").notNull().default("Perfume"),
+  /** JSON string array of scent options, e.g. ["Vanilla","Oud","Rose"] */
+  scents: text("scents").notNull().default("[]"),
   stock: integer("stock").notNull().default(1),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()

@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useMemo, useState } from "react";
 import {
   PRODUCT_CATEGORIES,
-  isProductCategory,
   normalizeCategory,
 } from "@/lib/categories";
 import { discountPercent } from "@/lib/sale";
+import { parseScents } from "@/lib/scents";
 import { formatNaira } from "@/lib/whatsapp";
 import type { Product } from "@/lib/schema";
 import {
@@ -31,6 +31,7 @@ type FormState = {
   compareAtPrice: string;
   category: string;
   stock: string;
+  scents: string[];
 };
 
 const emptyForm: FormState = {
@@ -41,6 +42,7 @@ const emptyForm: FormState = {
   compareAtPrice: "",
   category: "Perfume",
   stock: "1",
+  scents: [],
 };
 
 function toForm(product: Product): FormState {
@@ -54,6 +56,7 @@ function toForm(product: Product): FormState {
       : "",
     category: normalizeCategory(product.category),
     stock: String(product.stock ?? 1),
+    scents: parseScents(product.scents),
   };
 }
 
@@ -61,6 +64,7 @@ export function AdminDashboard({ initialProducts }: Props) {
   const router = useRouter();
   const [products, setProducts] = useState(initialProducts);
   const [form, setForm] = useState<FormState>(emptyForm);
+  const [scentDraft, setScentDraft] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -82,6 +86,7 @@ export function AdminDashboard({ initialProducts }: Props) {
   function startEdit(product: Product) {
     setEditingId(product.id);
     setForm(toForm(product));
+    setScentDraft("");
     setFile(null);
     setPreview(product.imageUrl);
     setError(null);
@@ -92,10 +97,29 @@ export function AdminDashboard({ initialProducts }: Props) {
   function cancelEdit() {
     setEditingId(null);
     setForm(emptyForm);
+    setScentDraft("");
     setFile(null);
     setPreview(null);
     setMessage(null);
     setError(null);
+  }
+
+  function addScent() {
+    const next = scentDraft.trim();
+    if (!next) return;
+    if (form.scents.some((s) => s.toLowerCase() === next.toLowerCase())) {
+      setScentDraft("");
+      return;
+    }
+    setForm({ ...form, scents: [...form.scents, next] });
+    setScentDraft("");
+  }
+
+  function removeScent(scent: string) {
+    setForm({
+      ...form,
+      scents: form.scents.filter((item) => item !== scent),
+    });
   }
 
   async function onSubmit(e: FormEvent) {
@@ -128,14 +152,17 @@ export function AdminDashboard({ initialProducts }: Props) {
         imagePublicId = uploaded.publicId;
       }
 
+      const payload = {
+        ...form,
+        scents: form.scents,
+        ...(imageUrl ? { imageUrl, imagePublicId } : {}),
+      };
+
       if (editingId) {
         const patchRes = await fetch(`/api/products/${editingId}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ...form,
-            ...(imageUrl ? { imageUrl, imagePublicId } : {}),
-          }),
+          body: JSON.stringify(payload),
         });
         const patched = await patchRes.json();
         if (!patchRes.ok) {
@@ -150,11 +177,7 @@ export function AdminDashboard({ initialProducts }: Props) {
         const createRes = await fetch("/api/products", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ...form,
-            imageUrl,
-            imagePublicId,
-          }),
+          body: JSON.stringify(payload),
         });
         const created = await createRes.json();
         if (!createRes.ok) {
@@ -162,6 +185,7 @@ export function AdminDashboard({ initialProducts }: Props) {
         }
         setProducts((prev) => [created.product, ...prev]);
         setForm(emptyForm);
+        setScentDraft("");
         setFile(null);
         setPreview(null);
         setMessage("Product published to the storefront");
@@ -219,8 +243,8 @@ export function AdminDashboard({ initialProducts }: Props) {
                 {editingId ? "Edit product" : "Upload perfume"}
               </h2>
               <p className="mt-1 text-sm text-[var(--muted)]">
-                Set selling price and old price. Discount % is calculated
-                automatically.
+                Enter sale price and normal price. Add scents when the same
+                perfume comes in different options.
               </p>
             </div>
             {editingId ? (
@@ -269,7 +293,7 @@ export function AdminDashboard({ initialProducts }: Props) {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="admin-field">
-                <span>Selling price (₦)</span>
+                <span>Sale price (₦)</span>
                 <input
                   required
                   type="number"
@@ -281,7 +305,7 @@ export function AdminDashboard({ initialProducts }: Props) {
                 />
               </label>
               <label className="admin-field">
-                <span>Old / slashed price (₦)</span>
+                <span>Normal price (₦)</span>
                 <input
                   type="number"
                   min="0"
@@ -301,7 +325,7 @@ export function AdminDashboard({ initialProducts }: Props) {
               </p>
             ) : (
               <p className="text-sm text-[var(--muted)]">
-                Add an old price higher than selling price to show a discount
+                Add a normal price higher than the sale price to show a discount
                 badge.
               </p>
             )}
@@ -331,6 +355,53 @@ export function AdminDashboard({ initialProducts }: Props) {
                   onChange={(e) => setForm({ ...form, stock: e.target.value })}
                 />
               </label>
+            </div>
+
+            <div className="admin-field">
+              <span>Scents / variants</span>
+              <p className="mb-2 text-xs text-[var(--muted)]">
+                Same perfume, different scents. Buyers pick one before checkout.
+              </p>
+              <div className="admin-scent-row">
+                <input
+                  value={scentDraft}
+                  onChange={(e) => setScentDraft(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      addScent();
+                    }
+                  }}
+                  placeholder="e.g. Vanilla, Oud, Rose"
+                />
+                <button
+                  type="button"
+                  className="admin-ghost dark"
+                  onClick={addScent}
+                >
+                  Add scent
+                </button>
+              </div>
+              {form.scents.length > 0 ? (
+                <div className="admin-scent-list">
+                  {form.scents.map((scent) => (
+                    <button
+                      key={scent}
+                      type="button"
+                      className="admin-scent-chip"
+                      onClick={() => removeScent(scent)}
+                      title="Remove scent"
+                    >
+                      {scent}
+                      <IconClose size={12} />
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <p className="mt-2 text-xs text-[var(--muted)]">
+                  Optional. Leave empty if there is only one scent.
+                </p>
+              )}
             </div>
 
             <label className="admin-field">
@@ -392,6 +463,7 @@ export function AdminDashboard({ initialProducts }: Props) {
                   product.price,
                   product.compareAtPrice,
                 );
+                const scents = parseScents(product.scents);
                 return (
                   <div key={product.id} className="admin-row">
                     <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-md bg-[var(--plum-deep)]">
@@ -414,6 +486,9 @@ export function AdminDashboard({ initialProducts }: Props) {
                       </p>
                       <p className="text-xs uppercase tracking-wide text-[var(--muted)]">
                         {normalizeCategory(product.category)}
+                        {scents.length > 0
+                          ? ` · ${scents.length} scent${scents.length === 1 ? "" : "s"}`
+                          : ""}
                       </p>
                       <p className="text-sm text-[var(--brand)]">
                         {product.compareAtPrice ? (

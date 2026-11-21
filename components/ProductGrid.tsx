@@ -4,6 +4,7 @@ import Image from "next/image";
 import { type MouseEvent, useMemo, useState } from "react";
 import { PRODUCT_CATEGORIES, normalizeCategory } from "@/lib/categories";
 import { discountPercent } from "@/lib/sale";
+import { cartLineId, cartLineName, parseScents } from "@/lib/scents";
 import { buildWhatsAppUrl, formatNaira } from "@/lib/whatsapp";
 import type { Product } from "@/lib/schema";
 import { useCart } from "./CartProvider";
@@ -36,9 +37,14 @@ function ProductCard({
 
   function handleAdd(e: MouseEvent) {
     e.stopPropagation();
+    const scents = parseScents(product.scents);
+    if (scents.length > 0) {
+      openProduct(product);
+      return;
+    }
     addItem({
-      id: product.id,
-      name: displayName,
+      id: cartLineId(product.id),
+      name: cartLineName(displayName),
       price: product.price,
       compareAtPrice: product.compareAtPrice,
       imageUrl: product.imageUrl,
