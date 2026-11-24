@@ -57,6 +57,178 @@ a {
     linear-gradient(180deg, #fbf8fa 0%, var(--paper) 35%, #f3ecef 100%);
 }
 
+.coming-soon {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  color: #fff;
+  padding: 2rem 1.25rem 2.5rem;
+}
+
+.coming-soon-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.coming-soon-photo {
+  object-fit: cover;
+  object-position: center 40%;
+  transform: scale(1.04);
+  animation: coming-drift 18s ease-in-out infinite alternate;
+}
+
+.coming-soon-veil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(14, 9, 20, 0.55) 0%, rgba(14, 9, 20, 0.72) 48%, rgba(14, 9, 20, 0.88) 100%),
+    radial-gradient(700px 420px at 50% 15%, rgba(201, 162, 39, 0.18), transparent 60%);
+}
+
+.coming-soon-content {
+  position: relative;
+  z-index: 1;
+  width: min(640px, 100%);
+  text-align: center;
+  animation: rise 0.9s ease both;
+}
+
+.coming-soon-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 1.6rem;
+}
+
+.coming-soon-logo {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(232, 217, 168, 0.45);
+  object-fit: cover;
+}
+
+.coming-soon-brand-name {
+  margin: 0;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(2rem, 6vw, 2.8rem);
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.coming-soon-brand-name i {
+  font-style: italic;
+  opacity: 0.88;
+}
+
+.coming-soon-eyebrow {
+  margin: 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--champagne);
+  animation: flash-color 2.2s ease-in-out infinite;
+}
+
+.coming-soon-title {
+  margin: 0.7rem 0 0;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(3rem, 10vw, 4.6rem);
+  font-weight: 400;
+  line-height: 0.95;
+}
+
+.coming-soon-title span {
+  display: block;
+  font-style: italic;
+  color: var(--champagne);
+}
+
+.coming-soon-lead {
+  margin: 1.15rem auto 0;
+  max-width: 34rem;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 1.05rem;
+  line-height: 1.55;
+  font-weight: 300;
+}
+
+.coming-soon-timer-block {
+  margin-top: 1.75rem;
+}
+
+.coming-soon-timer-label {
+  margin: 0 0 0.75rem;
+  font-size: 0.74rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.countdown {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.countdown-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.85rem 0.4rem;
+  border: 1px solid rgba(232, 217, 168, 0.28);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(10px);
+  animation: pulse-glow 2.8s ease-in-out infinite;
+}
+
+.countdown-cell strong {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(1.6rem, 5vw, 2.2rem);
+  font-weight: 400;
+  line-height: 1;
+  color: #fff;
+}
+
+.countdown-cell span {
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.coming-soon-note {
+  margin: 1.25rem auto 0;
+  max-width: 28rem;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.coming-soon-wa {
+  margin-top: 1.5rem;
+  padding: 0.8rem 1.25rem;
+  font-size: 0.78rem;
+}
+
+.coming-soon-wa .wa-nav-label,
+.coming-soon-wa span {
+  display: inline;
+}
+
+@keyframes coming-drift {
+  from {
+    transform: scale(1.04) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.1) translate3d(0, -1.5%, 0);
+  }
+}
+
 .site-chrome {
   position: sticky;
   top: 0;

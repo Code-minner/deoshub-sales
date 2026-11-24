@@ -7,7 +7,18 @@ export const SALE = {
   whatsappDisplay: "09161848921",
   whatsappNumber: "2349161848921",
   offers: ["Discounts", "Combo Deals", "Freebies"],
+  /** Midnight West Africa Time on 27 Nov 2026 */
+  opensAt: "2026-11-27T00:00:00+01:00",
+  closesAt: "2026-12-02T00:00:00+01:00",
 } as const;
+
+export function getSaleOpensAt() {
+  return new Date(SALE.opensAt);
+}
+
+export function isSaleOpen(now: Date) {
+  return now.getTime() >= getSaleOpensAt().getTime();
+}
 
 export function discountPercent(
   price: string | number,
